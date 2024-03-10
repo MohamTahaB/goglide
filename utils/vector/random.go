@@ -16,7 +16,7 @@ func RandomVelocity() Vector {
 	x, y := rand.Float64(), rand.Float64()
 
 	v := NewVector(x, y)
-	v.Times(rand.Float64() * 2.0)
+	v.Times(rand.Float64() * 200.0)
 
 	return v
 }
