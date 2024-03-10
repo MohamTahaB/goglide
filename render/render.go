@@ -10,10 +10,11 @@ import (
 )
 
 const (
-	deltaT = 1.0 / 60
-	w      = 640
-	h      = 480
-	number = 1024
+	deltaT           = 1.0 / 60
+	w                = 640
+	h                = 480
+	number           = 100
+	perceptionRadius = 20.0
 )
 
 type Render struct {
@@ -22,7 +23,7 @@ type Render struct {
 
 func InitiateRender() *Render {
 	return &Render{
-		m: model.NewModel(number, w, h),
+		m: model.NewModel(number, w, h, perceptionRadius),
 	}
 }
 
@@ -35,7 +36,7 @@ func (r *Render) Launch() {
 }
 
 func (r *Render) Update() error {
-	r.m.Update(deltaT)
+	r.m.Update(deltaT, w, h)
 	return nil
 }
 

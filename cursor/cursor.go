@@ -12,8 +12,8 @@ type Cursor struct {
 // RandomCursor returns a cursor with random position, velocity and acceleration.
 func RandomCursor(w, h int) *Cursor {
 	return &Cursor{
-		position: vector.RandomPos(w, h),
-		velocity: vector.RandomVelocity(),
+		position:     vector.RandomPos(w, h),
+		velocity:     vector.RandomVelocity(),
 		acceleration: vector.RandomAcceleration(),
 	}
 }
@@ -30,9 +30,10 @@ func (c *Cursor) GetAcceleration() vector.Vector {
 	return c.acceleration
 }
 
-func (c Cursor) Update(deltaT, radius float64, boids *[]*Cursor) *Cursor {
+func (c Cursor) Update(deltaT, radius float64, boids *[]*Cursor, w, h int) *Cursor {
 	steer := c.Align(radius, boids)
 
+	c.acceleration.Times(0.5)
 	c.acceleration.Plus(&steer)
 
 	velocityIncrement := c.acceleration
@@ -42,6 +43,20 @@ func (c Cursor) Update(deltaT, radius float64, boids *[]*Cursor) *Cursor {
 	posIncrement := c.velocity
 	posIncrement.Times(deltaT)
 	c.position.Plus(&posIncrement)
+
+	if c.position.GetX() > float64(w) {
+		c.position.SetX(c.position.GetX() - float64(w))
+	}
+	if c.position.GetX() < 0 {
+		c.position.SetX(c.position.GetX() + float64(w))
+	}
+
+	if c.position.GetY() > float64(h) {
+		c.position.SetY(c.position.GetY() - float64(h))
+	}
+	if c.position.GetY() < 0 {
+		c.position.SetY(c.position.GetY() + float64(h))
+	}
 
 	return &c
 }
