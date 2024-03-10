@@ -22,5 +22,6 @@ jobs:
             - name: Get dependencies
               run: go mod download
 
-            - name: Run todo tests
+            - name: Run tests
               run: go test ./...
+
