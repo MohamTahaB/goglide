@@ -6,6 +6,7 @@ import (
 )
 
 type Model struct {
+	radius float64
 	boids []*cursor.Cursor
 }
 
@@ -26,4 +27,13 @@ func (m *Model) GetBoids() *[]*cursor.Cursor {
 		return nil
 	}
 	return &(m.boids)
+}
+
+func (m *Model) Update(deltaT float64) {
+	var newBoids []*cursor.Cursor
+	for _, boid := range m.boids {
+		newBoids = append(newBoids, boid.Update(deltaT, m.radius, &m.boids))
+	}
+
+	m.boids = newBoids
 }

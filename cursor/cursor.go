@@ -29,3 +29,19 @@ func (c *Cursor) GetVelocity() vector.Vector {
 func (c *Cursor) GetAcceleration() vector.Vector {
 	return c.acceleration
 }
+
+func (c Cursor) Update(deltaT, radius float64, boids *[]*Cursor) *Cursor {
+	steer := c.Align(radius, boids)
+
+	c.acceleration.Plus(&steer)
+
+	velocityIncrement := c.acceleration
+	velocityIncrement.Times(deltaT)
+	c.velocity.Plus(&velocityIncrement)
+
+	posIncrement := c.velocity
+	posIncrement.Times(deltaT)
+	c.position.Plus(&posIncrement)
+
+	return &c
+}
