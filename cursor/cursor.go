@@ -9,6 +9,15 @@ type Cursor struct {
 	acceleration vector.Vector
 }
 
+// RandomCursor returns a cursor with random position, velocity and acceleration.
+func RandomCursor(w, h int) *Cursor {
+	return &Cursor{
+		position: vector.RandomPos(w, h),
+		velocity: vector.RandomVelocity(),
+		acceleration: vector.RandomAcceleration(),
+	}
+}
+
 func (c *Cursor) GetPosition() vector.Vector {
 	return c.position
 }
