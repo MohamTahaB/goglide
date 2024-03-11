@@ -30,10 +30,21 @@ func (c *Cursor) GetAcceleration() vector.Vector {
 	return c.acceleration
 }
 
-func (c Cursor) Update(deltaT, radius float64, boids *[]*Cursor, w, h int) *Cursor {
+func (c *Cursor) SetPosition(pos *vector.Vector) {
+	c.position = *pos
+}
+
+func (c *Cursor) SetVelocity(v *vector.Vector) {
+	c.velocity = *v
+}
+
+func (c *Cursor) SetAcceleration(acc *vector.Vector) {
+	c.acceleration = *acc
+}
+
+func (c Cursor) Update(deltaT, radius, accMagnitude, velMagnitude float64, boids *[]*Cursor, w, h int) *Cursor {
 	steer := c.Align(radius, boids)
 
-	c.acceleration.Times(0.5)
 	c.acceleration.Plus(&steer)
 
 	velocityIncrement := c.acceleration
@@ -58,5 +69,23 @@ func (c Cursor) Update(deltaT, radius float64, boids *[]*Cursor, w, h int) *Curs
 		c.position.SetY(c.position.GetY() + float64(h))
 	}
 
+	// Limit both acceleration and velocity magnitudes.
+	c.LimitAcceleration(accMagnitude)
+	c.LimitVelocity(velMagnitude)
+
 	return &c
+}
+
+// LimitAcceleration limits the magnitude of the acceleration vector
+func (c *Cursor) LimitAcceleration(magnitude float64) {
+	if c.acceleration.Distance() > magnitude {
+		c.acceleration.Times(magnitude / c.acceleration.Distance())
+	}
+}
+
+// LimitVelocity limits the magnitude of the velocity vector
+func (c *Cursor) LimitVelocity(magnitude float64) {
+	if c.velocity.Distance() > magnitude {
+		c.velocity.Times(magnitude / c.velocity.Distance())
+	}
 }

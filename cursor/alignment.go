@@ -22,6 +22,6 @@ func (c Cursor) Align(radius float64, boids *[]*Cursor) vector.Vector {
 		alignmentSteer.Times(1.0 / float64(t))
 	}
 
-	alignmentSteer.Minus(&c.velocity)
+	alignmentSteer.Minus(&c.acceleration)
 	return alignmentSteer
 }
