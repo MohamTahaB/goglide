@@ -30,15 +30,15 @@ func (c *Cursor) GetAcceleration() vector.Vector {
 	return c.acceleration
 }
 
-func (c *Cursor) SetPosition( pos *vector.Vector) {
+func (c *Cursor) SetPosition(pos *vector.Vector) {
 	c.position = *pos
 }
 
-func (c *Cursor) SetVelocity( v *vector.Vector) {
+func (c *Cursor) SetVelocity(v *vector.Vector) {
 	c.velocity = *v
 }
 
-func (c *Cursor) SetAcceleration( acc *vector.Vector) {
+func (c *Cursor) SetAcceleration(acc *vector.Vector) {
 	c.acceleration = *acc
 }
 
@@ -76,13 +76,13 @@ func (c Cursor) Update(deltaT, radius float64, boids *[]*Cursor, w, h int) *Curs
 // LimitAcceleration limits the magnitude of the acceleration vector
 func (c *Cursor) LimitAcceleration(magnitude float64) {
 	if c.acceleration.Distance() > magnitude {
-		c.acceleration.Times(magnitude/c.acceleration.Distance())
+		c.acceleration.Times(magnitude / c.acceleration.Distance())
 	}
 }
 
 // LimitVelocity limits the magnitude of the velocity vector
 func (c *Cursor) LimitVelocity(magnitude float64) {
 	if c.velocity.Distance() > magnitude {
-		c.velocity.Times(magnitude/c.velocity.Distance())
+		c.velocity.Times(magnitude / c.velocity.Distance())
 	}
 }
