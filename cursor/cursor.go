@@ -19,7 +19,7 @@ func RandomCursor(w, h int) *Cursor {
 	return &Cursor{
 		position:        vector.RandomPos(w, h),
 		velocity:        vector.RandomVelocity(),
-		acceleration:    vector.RandomAcceleration(),
+		acceleration:    vector.NewVector(0, 0),
 		maxVelocity:     150 + rand.Float64()*50,
 		maxAcceleration: 50 + rand.Float64()*150,
 	}
@@ -61,9 +61,11 @@ func (c Cursor) Update(deltaT, radius float64, boids *[]*Cursor, w, h int) *Curs
 	// Compute steers
 	alignmentSteer := c.Align(radius, boids)
 	cohesionSteer := c.Cohesion(radius, boids)
+	separationSteer := c.Separate(radius, boids)
 
 	c.acceleration.Plus(&alignmentSteer)
 	c.acceleration.Plus(&cohesionSteer)
+	c.acceleration.Plus(&separationSteer)
 
 	velocityIncrement := c.acceleration
 	velocityIncrement.Times(deltaT)
