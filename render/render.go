@@ -14,7 +14,7 @@ const (
 	w                = 640
 	h                = 480
 	number           = 100
-	perceptionRadius = 20.0
+	perceptionRadius = 70.0
 	accMagnitude     = 100
 	velMagnitude     = 150
 )
@@ -25,7 +25,7 @@ type Render struct {
 
 func InitiateRender() *Render {
 	return &Render{
-		m: model.NewModel(number, w, h, perceptionRadius, accMagnitude, velMagnitude),
+		m: model.NewModel(number, w, h, perceptionRadius),
 	}
 }
 

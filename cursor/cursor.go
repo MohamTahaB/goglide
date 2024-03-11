@@ -1,20 +1,27 @@
 // Package cursor provides the cursor struct and its handling methods.
 package cursor
 
-import "github.com/MohamTahaB/goglide/utils/vector"
+import (
+	"math/rand"
+
+	"github.com/MohamTahaB/goglide/utils/vector"
+)
 
 type Cursor struct {
-	position     vector.Vector
-	velocity     vector.Vector
-	acceleration vector.Vector
+	position                     vector.Vector
+	velocity                     vector.Vector
+	acceleration                 vector.Vector
+	maxAcceleration, maxVelocity float64
 }
 
 // RandomCursor returns a cursor with random position, velocity and acceleration.
 func RandomCursor(w, h int) *Cursor {
 	return &Cursor{
-		position:     vector.RandomPos(w, h),
-		velocity:     vector.RandomVelocity(),
-		acceleration: vector.RandomAcceleration(),
+		position:        vector.RandomPos(w, h),
+		velocity:        vector.RandomVelocity(),
+		acceleration:    vector.RandomAcceleration(),
+		maxVelocity:     150 + rand.Float64()*50,
+		maxAcceleration: 50 + rand.Float64()*150,
 	}
 }
 
@@ -30,6 +37,14 @@ func (c *Cursor) GetAcceleration() vector.Vector {
 	return c.acceleration
 }
 
+func (c *Cursor) GetMaxAcceleration() float64 {
+	return c.maxAcceleration
+}
+
+func (c *Cursor) GetMaxVelocity() float64 {
+	return c.maxVelocity
+}
+
 func (c *Cursor) SetPosition(pos *vector.Vector) {
 	c.position = *pos
 }
@@ -42,10 +57,15 @@ func (c *Cursor) SetAcceleration(acc *vector.Vector) {
 	c.acceleration = *acc
 }
 
-func (c Cursor) Update(deltaT, radius, accMagnitude, velMagnitude float64, boids *[]*Cursor, w, h int) *Cursor {
-	steer := c.Align(radius, boids)
+func (c Cursor) Update(deltaT, radius float64, boids *[]*Cursor, w, h int) *Cursor {
+	// Compute steers
+	alignmentSteer := c.Align(radius, boids)
+	// TODO
+	//cohesionSteer := c.Cohesion(radius, boids)
 
-	c.acceleration.Plus(&steer)
+	c.acceleration.Plus(&alignmentSteer)
+	// TODO
+	//c.acceleration.Plus(&cohesionSteer)
 
 	velocityIncrement := c.acceleration
 	velocityIncrement.Times(deltaT)
@@ -70,22 +90,22 @@ func (c Cursor) Update(deltaT, radius, accMagnitude, velMagnitude float64, boids
 	}
 
 	// Limit both acceleration and velocity magnitudes.
-	c.LimitAcceleration(accMagnitude)
-	c.LimitVelocity(velMagnitude)
+	c.LimitAcceleration()
+	c.LimitVelocity()
 
 	return &c
 }
 
 // LimitAcceleration limits the magnitude of the acceleration vector
-func (c *Cursor) LimitAcceleration(magnitude float64) {
-	if c.acceleration.Distance() > magnitude {
-		c.acceleration.Times(magnitude / c.acceleration.Distance())
+func (c *Cursor) LimitAcceleration() {
+	if c.acceleration.Distance() > c.maxAcceleration {
+		c.acceleration.Times(c.maxAcceleration / c.acceleration.Distance())
 	}
 }
 
 // LimitVelocity limits the magnitude of the velocity vector
-func (c *Cursor) LimitVelocity(magnitude float64) {
-	if c.velocity.Distance() > magnitude {
-		c.velocity.Times(magnitude / c.velocity.Distance())
+func (c *Cursor) LimitVelocity() {
+	if c.velocity.Distance() > c.maxVelocity {
+		c.velocity.Times(c.maxVelocity / c.velocity.Distance())
 	}
 }
