@@ -60,12 +60,10 @@ func (c *Cursor) SetAcceleration(acc *vector.Vector) {
 func (c Cursor) Update(deltaT, radius float64, boids *[]*Cursor, w, h int) *Cursor {
 	// Compute steers
 	alignmentSteer := c.Align(radius, boids)
-	// TODO
-	//cohesionSteer := c.Cohesion(radius, boids)
+	cohesionSteer := c.Cohesion(radius, boids)
 
 	c.acceleration.Plus(&alignmentSteer)
-	// TODO
-	//c.acceleration.Plus(&cohesionSteer)
+	c.acceleration.Plus(&cohesionSteer)
 
 	velocityIncrement := c.acceleration
 	velocityIncrement.Times(deltaT)
