@@ -13,15 +13,15 @@ func RandomPos(w, h int) Vector {
 
 // RandomVelocity returns a random velocity vector.
 func RandomVelocity() Vector {
-	x, y := rand.Float64(), rand.Float64()
+	x, y := rand.Float64()-0.5, rand.Float64()-0.5
 
 	v := NewVector(x, y)
-	v.Times(rand.Float64() * 200.0)
+	v.Times(rand.Float64() * 400.0)
 
 	return v
 }
 
 // RandomAcceleration returns a random acceleration vector.
 func RandomAcceleration() Vector {
-	return NewVector(rand.Float64(), rand.Float64())
+	return NewVector(rand.Float64()*2-1, rand.Float64()*2-1)
 }
