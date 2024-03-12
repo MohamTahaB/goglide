@@ -10,7 +10,7 @@ import (
 func TestNewModel(t *testing.T) {
 
 	number := rand.Intn(20) + 10
-	m := model.NewModel(number, 1920, 1080, 20)
+	m := model.NewModel(number, 1920, 1080, 20, 20)
 	boids := m.GetBoids()
 
 	if boids == nil {
