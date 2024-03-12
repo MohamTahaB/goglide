@@ -27,7 +27,7 @@ if [ $? -eq 0 ]; then
 
     # Create the release on GitHub
     echo "Creating GitHub release..."
-    gh release create "$VERSION" -t "$VERSION" -n "$(cat "$RELEASE_NOTES")" "$BINARY_NAME"
+        gh release create "$VERSION" -t "$VERSION" -n "$(cat "$RELEASE_NOTES")" "$BINARY_NAME"
 else
     echo "Build failed."
     exit 1
